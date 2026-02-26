@@ -10,7 +10,7 @@
           <a href="#" class="hero-cta">Lorem Ipsum</a>
         </div>
         <div class="hero-image">
-          <img src="https://picsum.photos/1200/500?random=1" alt="" />
+          <img src="/images/placeholder.svg" alt="" />
         </div>
       </section>
 
@@ -20,7 +20,7 @@
         <div class="features-grid">
           <div class="feature-card">
             <div class="feature-image">
-              <img src="https://picsum.photos/400/250?random=2" alt="" />
+              <img src="/images/placeholder.svg" alt="" />
             </div>
             <h3 class="feature-title">Lorem ipsum dolor</h3>
             <p class="feature-text">
@@ -29,7 +29,7 @@
           </div>
           <div class="feature-card">
             <div class="feature-image">
-              <img src="https://picsum.photos/400/250?random=3" alt="" />
+              <img src="/images/placeholder.svg" alt="" />
             </div>
             <h3 class="feature-title">Consectetur adipiscing</h3>
             <p class="feature-text">
@@ -38,7 +38,7 @@
           </div>
           <div class="feature-card">
             <div class="feature-image">
-              <img src="https://picsum.photos/400/250?random=4" alt="" />
+              <img src="/images/placeholder.svg" alt="" />
             </div>
             <h3 class="feature-title">Sed do eiusmod tempor</h3>
             <p class="feature-text">
@@ -47,7 +47,7 @@
           </div>
           <div class="feature-card">
             <div class="feature-image">
-              <img src="https://picsum.photos/400/250?random=5" alt="" />
+              <img src="/images/placeholder.svg" alt="" />
             </div>
             <h3 class="feature-title">Incididunt ut labore</h3>
             <p class="feature-text">
@@ -74,21 +74,21 @@
         <div class="products-grid">
           <router-link to="/product/sliding-drives" class="product-card">
             <div class="product-image">
-              <img src="https://picsum.photos/400/300?random=6" alt="" />
+              <img src="/images/placeholder.svg" alt="" />
             </div>
             <h3 class="product-title">Lorem ipsum dolor sit amet consectetur</h3>
             <span class="product-link">Lorem Ipsum →</span>
           </router-link>
           <router-link to="/product/proff" class="product-card">
             <div class="product-image">
-              <img src="https://picsum.photos/400/300?random=7" alt="" />
+              <img src="/images/placeholder.svg" alt="" />
             </div>
             <h3 class="product-title">Consectetur adipiscing elit r. r.</h3>
             <span class="product-link">Lorem Ipsum →</span>
           </router-link>
           <router-link to="/product/telescopic" class="product-card">
             <div class="product-image">
-              <img src="https://picsum.photos/400/300?random=8" alt="" />
+              <img src="/images/placeholder.svg" alt="" />
             </div>
             <h3 class="product-title">Sed do eiusmod tempor r. r.</h3>
             <span class="product-link">Lorem Ipsum →</span>

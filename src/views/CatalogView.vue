@@ -15,22 +15,22 @@
 
       <div class="catalog-grid">
         <router-link to="/product/sliding-drives" class="catalog-card">
-          <img src="https://picsum.photos/300/200?random=40" alt="" />
+          <img src="/images/placeholder.svg" alt="" />
           <h3>Lorem ipsum dolor sit amet</h3>
           <span class="card-link">Lorem Ipsum →</span>
         </router-link>
         <router-link to="/product/telescopic" class="catalog-card">
-          <img src="https://picsum.photos/300/200?random=41" alt="" />
+          <img src="/images/placeholder.svg" alt="" />
           <h3>Lorem ipsum dolor</h3>
           <span class="card-link">Lorem Ipsum →</span>
         </router-link>
         <router-link to="/product/proff" class="catalog-card">
-          <img src="https://picsum.photos/300/200?random=42" alt="" />
+          <img src="/images/placeholder.svg" alt="" />
           <h3>Lorem ipsum r. r.</h3>
           <span class="card-link">Lorem Ipsum →</span>
         </router-link>
         <router-link to="/product/accessories" class="catalog-card">
-          <img src="https://picsum.photos/300/200?random=43" alt="" />
+          <img src="/images/placeholder.svg" alt="" />
           <h3>Lorem ipsum dolor</h3>
           <span class="card-link">Lorem Ipsum →</span>
         </router-link>

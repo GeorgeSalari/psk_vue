@@ -13,25 +13,25 @@
 
       <div class="accessories-grid">
         <div class="accessory-card">
-          <img src="https://picsum.photos/300/200?random=60" alt="" />
+          <img src="/images/placeholder.svg" alt="" />
           <h3>Lorem ipsum VISYON</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt.</p>
           <a href="#" class="card-link">Lorem Ipsum</a>
         </div>
         <div class="accessory-card">
-          <img src="https://picsum.photos/300/200?random=61" alt="" />
+          <img src="/images/placeholder.svg" alt="" />
           <h3>Lorem ipsum 7S</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor.</p>
           <a href="#" class="card-link">Lorem Ipsum</a>
         </div>
         <div class="accessory-card">
-          <img src="https://picsum.photos/300/200?random=62" alt="" />
+          <img src="/images/placeholder.svg" alt="" />
           <h3>Lorem PC-12</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod.</p>
           <a href="#" class="card-link">Lorem Ipsum</a>
         </div>
         <div class="accessory-card">
-          <img src="https://picsum.photos/300/200?random=63" alt="" />
+          <img src="/images/placeholder.svg" alt="" />
           <h3>Lorem ipsum dolor</h3>
           <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
           <a href="#" class="card-link">Lorem Ipsum</a>

@@ -1,7 +1,7 @@
 <template>
   <ProductDetailView
     page-title="Lorem ipsum dolor sit amet consectetur"
-    image-url="https://picsum.photos/800/400?random=50"
+    image-url="/images/placeholder.svg"
     :description="description"
     :sections="sections"
   />
