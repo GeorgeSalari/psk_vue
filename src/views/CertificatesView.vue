@@ -19,8 +19,8 @@
       <section class="cert-section">
         <h2>Lorem ipsum dolor</h2>
         <div class="cert-images">
-          <img src="https://picsum.photos/300/400?random=30" alt="" class="cert-img" />
-          <img src="https://picsum.photos/300/400?random=31" alt="" class="cert-img" />
+          <img src="/images/placeholder.svg" alt="" class="cert-img" />
+          <img src="/images/placeholder.svg" alt="" class="cert-img" />
         </div>
       </section>
     </div>

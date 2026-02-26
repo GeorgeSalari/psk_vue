@@ -39,7 +39,7 @@ export default {
   components: { AppLayout },
   props: {
     pageTitle: { type: String, required: true },
-    imageUrl: { type: String, default: "https://picsum.photos/800/400?random=20" },
+    imageUrl: { type: String, default: "/images/placeholder.svg" },
     description: { type: String, required: true },
     sections: { type: Array as () => Array<{ title: string; text: string }>, default: () => [] },
   },

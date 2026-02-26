@@ -16,7 +16,7 @@
       <div class="product-links">
         <router-link to="/product/sliding-drives" class="product-link-card">
           <div class="link-image">
-            <img src="https://picsum.photos/400/250?random=10" alt="" />
+            <img src="/images/placeholder.svg" alt="" />
           </div>
           <h3>Lorem ipsum dolor sit amet consectetur</h3>
           <span class="link-arrow">Lorem Ipsum →</span>
@@ -24,7 +24,7 @@
 
         <router-link to="/product/telescopic" class="product-link-card">
           <div class="link-image">
-            <img src="https://picsum.photos/400/250?random=11" alt="" />
+            <img src="/images/placeholder.svg" alt="" />
           </div>
           <h3>Lorem ipsum dolor sit amet</h3>
           <span class="link-arrow">Lorem Ipsum →</span>
@@ -32,7 +32,7 @@
 
         <router-link to="/product/proff" class="product-link-card">
           <div class="link-image">
-            <img src="https://picsum.photos/400/250?random=12" alt="" />
+            <img src="/images/placeholder.svg" alt="" />
           </div>
           <h3>Lorem ipsum dolor r. r.</h3>
           <span class="link-arrow">Lorem Ipsum →</span>
@@ -40,7 +40,7 @@
 
         <router-link to="/product/accessories" class="product-link-card">
           <div class="link-image">
-            <img src="https://picsum.photos/400/250?random=13" alt="" />
+            <img src="/images/placeholder.svg" alt="" />
           </div>
           <h3>Lorem ipsum dolor</h3>
           <span class="link-arrow">Lorem Ipsum →</span>
