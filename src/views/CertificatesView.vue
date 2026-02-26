@@ -19,8 +19,8 @@
       <section class="cert-section">
         <h2>Lorem ipsum dolor</h2>
         <div class="cert-images">
-          <img src="/images/placeholder.svg" alt="" class="cert-img" />
-          <img src="/images/placeholder.svg" alt="" class="cert-img" />
+          <img :src="placeholderImg" alt="" class="cert-img" />
+          <img :src="placeholderImg" alt="" class="cert-img" />
         </div>
       </section>
     </div>
@@ -29,9 +29,13 @@
 
 <script lang="ts">
 import AppLayout from "@/components/AppLayout.vue";
+import { PLACEHOLDER_IMAGE } from "@/constants/images";
 
 export default {
   components: { AppLayout },
+  data() {
+    return { placeholderImg: PLACEHOLDER_IMAGE };
+  },
 };
 </script>
 

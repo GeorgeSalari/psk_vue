@@ -34,12 +34,13 @@
 
 <script lang="ts">
 import AppLayout from "@/components/AppLayout.vue";
+import { PLACEHOLDER_IMAGE } from "@/constants/images";
 
 export default {
   components: { AppLayout },
   props: {
     pageTitle: { type: String, required: true },
-    imageUrl: { type: String, default: "/images/placeholder.svg" },
+    imageUrl: { type: String, default: () => PLACEHOLDER_IMAGE },
     description: { type: String, required: true },
     sections: { type: Array as () => Array<{ title: string; text: string }>, default: () => [] },
   },

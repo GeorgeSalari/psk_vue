@@ -15,22 +15,22 @@
 
       <div class="catalog-grid">
         <router-link to="/product/sliding-drives" class="catalog-card">
-          <img src="/images/placeholder.svg" alt="" />
+          <img :src="placeholderImg" alt="" />
           <h3>Lorem ipsum dolor sit amet</h3>
           <span class="card-link">Lorem Ipsum →</span>
         </router-link>
         <router-link to="/product/telescopic" class="catalog-card">
-          <img src="/images/placeholder.svg" alt="" />
+          <img :src="placeholderImg" alt="" />
           <h3>Lorem ipsum dolor</h3>
           <span class="card-link">Lorem Ipsum →</span>
         </router-link>
         <router-link to="/product/proff" class="catalog-card">
-          <img src="/images/placeholder.svg" alt="" />
+          <img :src="placeholderImg" alt="" />
           <h3>Lorem ipsum r. r.</h3>
           <span class="card-link">Lorem Ipsum →</span>
         </router-link>
         <router-link to="/product/accessories" class="catalog-card">
-          <img src="/images/placeholder.svg" alt="" />
+          <img :src="placeholderImg" alt="" />
           <h3>Lorem ipsum dolor</h3>
           <span class="card-link">Lorem Ipsum →</span>
         </router-link>
@@ -41,9 +41,13 @@
 
 <script lang="ts">
 import AppLayout from "@/components/AppLayout.vue";
+import { PLACEHOLDER_IMAGE } from "@/constants/images";
 
 export default {
   components: { AppLayout },
+  data() {
+    return { placeholderImg: PLACEHOLDER_IMAGE };
+  },
 };
 </script>
 
