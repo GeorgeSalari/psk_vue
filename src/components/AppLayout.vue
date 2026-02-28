@@ -1,6 +1,9 @@
 <template>
   <div class="layout">
     <header class="header">
+      <router-link to="/" class="logo-link">
+        <img src="/logo.png" alt="ПСК МОНТАЖ" class="logo" />
+      </router-link>
       <nav class="nav">
         <router-link to="/" class="nav-link">Lorem</router-link>
         <router-link to="/about" class="nav-link">Ipsum</router-link>
@@ -56,6 +59,20 @@ export default {};
   padding: 1rem 2rem;
   background: #1a1a1a;
   color: #fff;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  .logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+
+  .logo {
+    height: 48px;
+    width: auto;
+    display: block;
+  }
 
   .nav {
     display: flex;
@@ -141,6 +158,10 @@ export default {};
   .header {
     flex-direction: column;
     gap: 1rem;
+
+    .logo {
+      height: 40px;
+    }
   }
 
   .footer .footer-content {
