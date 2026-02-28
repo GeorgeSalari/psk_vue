@@ -1,21 +1,18 @@
 <template>
   <div class="layout">
     <header class="header">
-      <router-link to="/" class="logo-link">
-        <img :src="logoUrl" alt="ПСК МОНТАЖ" class="logo" />
-      </router-link>
-      <nav class="nav">
-        <router-link to="/" class="nav-link">Lorem</router-link>
-        <router-link to="/about" class="nav-link">Ipsum</router-link>
-        <router-link to="/product" class="nav-link">Dolor</router-link>
-        <router-link to="/catalog" class="nav-link">Sit</router-link>
-        <router-link to="/downloads" class="nav-link">Amet</router-link>
-        <router-link to="/certificates" class="nav-link">Elit</router-link>
-        <router-link to="/contacts" class="nav-link">Consect</router-link>
-      </nav>
-      <div class="header-contact">
-        <a href="#" class="contact-link">+0 (000) 000-00-00</a>
-        <a href="#" class="contact-link">lorem@ipsum.dolor</a>
+      <div class="header-container">
+        <router-link to="/" class="logo-link">
+          <img :src="logoUrl" alt="ПСК МОНТАЖ" class="logo" />
+        </router-link>
+        <nav class="nav">
+          <router-link to="/about" class="nav-link">О компании</router-link>
+          <router-link to="/product" class="nav-link">Продукция</router-link>
+          <router-link to="/catalog" class="nav-link">Каталог</router-link>
+          <router-link to="/downloads" class="nav-link">Downloads</router-link>
+          <router-link to="/certificates" class="nav-link">Сертификаты</router-link>
+          <router-link to="/contacts" class="nav-link">Контакты</router-link>
+        </nav>
       </div>
     </header>
 
@@ -25,7 +22,9 @@
 
     <footer class="footer">
       <div class="footer-content">
-        <p class="footer-company">Lorem "Ipsum Dolor"</p>
+        <router-link to="/" class="footer-logo-link">
+          <img :src="logoUrl" alt="ПСК МОНТАЖ" class="footer-logo" />
+        </router-link>
         <div class="footer-links">
           <a href="#">Lorem ipsum dolor</a>
           <a href="#">Lorem ipsum</a>
@@ -59,12 +58,20 @@ export default {
 }
 
 .header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background: #1a1a1a;
-  color: #fff;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
   flex-wrap: wrap;
   gap: 1rem;
 
@@ -72,38 +79,28 @@ export default {
     display: flex;
     align-items: center;
     text-decoration: none;
+    margin-left: -2.4rem;
   }
 
   .logo {
-    height: 48px;
+    height: 130px;
     width: auto;
     display: block;
+    object-fit: contain;
   }
 
   .nav {
     display: flex;
+    align-items: center;
     gap: 1.5rem;
 
     .nav-link {
       color: #fff;
       text-decoration: none;
+      font-size: 0.95rem;
 
       &:hover,
       &.router-link-active {
-        text-decoration: underline;
-      }
-    }
-  }
-
-  .header-contact {
-    display: flex;
-    gap: 1.5rem;
-
-    .contact-link {
-      color: #fff;
-      text-decoration: none;
-
-      &:hover {
         text-decoration: underline;
       }
     }
@@ -117,7 +114,7 @@ export default {
 .footer {
   background: #1a1a1a;
   color: #fff;
-  padding: 2rem;
+  padding: 0 2rem;
 
   .footer-content {
     max-width: 1200px;
@@ -126,7 +123,20 @@ export default {
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
+  }
+
+  .footer-logo-link {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    margin-left: -2.4rem;
+  }
+
+  .footer-logo {
+    height: 130px;
+    width: auto;
+    object-fit: contain;
   }
 
   .footer-links {
@@ -161,17 +171,22 @@ export default {
 }
 
 @media (max-width: 768px) {
-  .header {
+  .header-container {
     flex-direction: column;
     gap: 1rem;
 
     .logo {
-      height: 40px;
+      height: 100px;
     }
   }
 
   .footer .footer-content {
     flex-direction: column;
+    text-align: center;
+  }
+
+  .footer .footer-logo {
+    height: 90px;
   }
 }
 </style>
