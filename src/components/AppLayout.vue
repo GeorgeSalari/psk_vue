@@ -2,7 +2,7 @@
   <div class="layout">
     <header class="header">
       <router-link to="/" class="logo-link">
-        <img src="/logo.png" alt="ПСК МОНТАЖ" class="logo" />
+        <img :src="logoUrl" alt="ПСК МОНТАЖ" class="logo" />
       </router-link>
       <nav class="nav">
         <router-link to="/" class="nav-link">Lorem</router-link>
@@ -41,7 +41,13 @@
 </template>
 
 <script lang="ts">
-export default {};
+import logoUrl from "@/assets/logo.png";
+
+export default {
+  data() {
+    return { logoUrl };
+  },
+};
 </script>
 
 <style lang="scss" scoped>
