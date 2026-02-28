@@ -17,15 +17,10 @@
         download="каталог_двери.pdf"
       >
         <img
-          v-if="catalogCoverSrc"
           :src="catalogCoverSrc"
           alt="Каталог продукции"
           class="catalog-cover"
         />
-        <div v-else class="catalog-cover catalog-cover--loading">
-          <span v-if="pdfError">{{ pdfError }}</span>
-          <span v-else>Загрузка…</span>
-        </div>
         <span class="download-label">Скачать</span>
       </a>
 
@@ -37,65 +32,16 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import AppLayout from "@/components/AppLayout.vue";
-import { PLACEHOLDER_IMAGE } from "@/constants/images";
 
 const CATALOG_FILENAME = "каталог_двери.pdf";
-
-// PDF.js v3 from CDN - see public/index.html
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const pdfjsLib = (window as any).pdfjsLib;
 
 export default defineComponent({
   components: { AppLayout },
   data() {
     return {
-      placeholderImg: PLACEHOLDER_IMAGE,
       catalogPdfUrl: `/${CATALOG_FILENAME}`,
-      catalogCoverSrc: "" as string,
-      pdfError: "" as string,
+      catalogCoverSrc: "/images/catalog-cover.png",
     };
-  },
-  mounted() {
-    this.renderPdfFirstPage();
-  },
-  methods: {
-    async renderPdfFirstPage() {
-      if (!pdfjsLib) {
-        this.pdfError = "PDF.js не загружен";
-        this.catalogCoverSrc = this.placeholderImg;
-        return;
-      }
-      pdfjsLib.GlobalWorkerOptions.workerSrc =
-        "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-      try {
-        const loadingTask = pdfjsLib.getDocument(this.catalogPdfUrl);
-        const pdf = await loadingTask.promise;
-        const page = await pdf.getPage(1);
-
-        const scale = 2; // 2x for sharper image
-        const viewport = page.getViewport({ scale });
-
-        const canvas = document.createElement("canvas");
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-        const context = canvas.getContext("2d");
-        if (!context) {
-          this.pdfError = "Ошибка рендеринга";
-          return;
-        }
-
-        await page.render({
-          canvasContext: context,
-          viewport,
-        }).promise;
-
-        this.catalogCoverSrc = canvas.toDataURL("image/jpeg", 0.85);
-      } catch (err) {
-        console.error("PDF load error:", err);
-        this.pdfError = "Не удалось загрузить превью";
-        this.catalogCoverSrc = this.placeholderImg;
-      }
-    },
   },
 });
 </script>
@@ -158,16 +104,6 @@ export default defineComponent({
     display: block;
     aspect-ratio: 3/4;
     object-fit: cover;
-
-    &--loading {
-      background: #f0f0f0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 300px;
-      color: #888;
-      font-size: 0.9rem;
-    }
   }
 
   .download-label {
