@@ -47,13 +47,13 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .page-content {
-  max-width: 800px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1.5rem 2rem;
 }
 
 .breadcrumb {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   font-size: 0.9rem;
   color: #666;
 
@@ -76,11 +76,11 @@ export default defineComponent({
   font-size: 1.1rem;
   line-height: 1.7;
   color: #444;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .content-section {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 
   h2 {
     font-size: 1.5rem;

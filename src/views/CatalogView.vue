@@ -48,9 +48,9 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .page-content {
-  max-width: 800px;
+  max-width: 1100px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1.5rem 2rem;
 }
 
 .breadcrumb {

@@ -20,18 +20,27 @@
     </main>
 
     <footer class="footer">
-      <div class="footer-content">
-        <router-link to="/" class="footer-logo-link">
-          <img :src="logoUrl" alt="ПСК МОНТАЖ" class="footer-logo" />
-        </router-link>
-        <div class="footer-links">
-          <a href="#">Lorem ipsum dolor</a>
-          <a href="#">Lorem ipsum</a>
-          <a href="#">Lorem ipsum</a>
+      <div class="footer-main">
+        <div class="footer-section footer-brand">
+          <router-link to="/" class="footer-logo-link">
+            <img :src="logoUrl" alt="ПСК МОНТАЖ" class="footer-logo" />
+          </router-link>
         </div>
-        <div class="footer-contact">
-          <a href="#">+0 (000) 000-00-00</a>
-          <a href="#">lorem@ipsum.dolor</a>
+        <div class="footer-section footer-contact">
+          <p class="footer-company">Завод стальных дверей «ПСК Монтаж»</p>
+          <p>
+            <a href="tel:+79180301137">8 (918) 030-11-37</a>,
+            <a href="tel:+79627667256">8 (962) 766-72-56</a>
+          </p>
+          <p>
+            <a href="mailto:PSKMontag23@yandex.ru">PSKMontag23@yandex.ru</a>
+          </p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-bottom-links">
+          <a href="#">Условия использования сайта</a>
+          <a href="#">Политика конфиденциальности</a>
         </div>
       </div>
     </footer>
@@ -112,59 +121,90 @@ export default {
 
 .footer {
   background: #1a1a1a;
-  color: #fff;
-  padding: 0 2rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: auto;
+}
 
-  .footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1.5rem;
-  }
+.footer-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem 4rem;
+}
 
-  .footer-logo-link {
+.footer-section {
+  a {
+    color: #fff;
     text-decoration: none;
-    display: flex;
-    align-items: center;
-    margin-left: -2.4rem;
+    font-size: 0.9rem;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.footer-brand {
+  .footer-logo-link {
+    display: block;
   }
 
   .footer-logo {
-    height: 130px;
+    height: 80px;
     width: auto;
     object-fit: contain;
+    display: block;
+  }
+}
+
+.footer-contact {
+  text-align: left;
+  font-size: 0.9rem;
+
+  .footer-company {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: #fff;
   }
 
-  .footer-links {
-    display: flex;
-    gap: 1.5rem;
+  p {
+    margin: 0 0 0.5rem;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
 
     a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 0.875rem;
-
-      &:hover {
-        text-decoration: underline;
-      }
+      color: rgba(255, 255, 255, 0.9);
     }
   }
+}
 
-  .footer-contact {
-    display: flex;
-    gap: 1.5rem;
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 1rem 2rem;
+}
 
-    a {
+.footer-bottom-links {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+
+  a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 0.8rem;
+
+    &:hover {
       color: #fff;
-      text-decoration: none;
-      font-size: 0.875rem;
-
-      &:hover {
-        text-decoration: underline;
-      }
+      text-decoration: underline;
     }
   }
 }
@@ -179,13 +219,25 @@ export default {
     }
   }
 
-  .footer .footer-content {
+  .footer .footer-main {
     flex-direction: column;
+    padding: 1.5rem;
+    gap: 1.5rem;
     text-align: center;
   }
 
   .footer .footer-logo {
-    height: 90px;
+    height: 70px;
+    margin: 0 auto;
+  }
+
+  .footer .footer-contact {
+    text-align: center;
+  }
+
+  .footer .footer-bottom-links {
+    flex-direction: column;
+    align-items: center;
   }
 }
 </style>
