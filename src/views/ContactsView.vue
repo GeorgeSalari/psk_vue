@@ -2,18 +2,28 @@
   <AppLayout>
     <div class="page-content">
       <div class="breadcrumb">
-        <router-link to="/">Lorem</router-link>
+        <router-link to="/">Главная</router-link>
         <span> → </span>
-        <span>Consect</span>
+        <span>Контакты</span>
       </div>
 
-      <h1 class="page-title">Lorem ipsum dolor sit amet</h1>
+      <h1 class="page-title">Контакты</h1>
 
       <div class="contacts-grid">
         <div class="contact-info">
-          <h2>Lorem "Ipsum Dolor"</h2>
-          <p><a href="#">+0 (000) 000-00-00</a></p>
-          <p><a href="#">lorem@ipsum.dolor</a></p>
+          <h2>Завод стальных дверей «ПСК Монтаж»</h2>
+          <p>Республика Адыгея, хутор Новый Сад, ул. Дорожная, 1</p>
+          <p>ИНН 2312338712, КПП 231201001</p>
+          <p>
+            <a href="tel:+79180301137">8 (918) 030-11-37</a>,
+            <a href="tel:+79627667256">8 (962) 766-72-56</a>
+          </p>
+          <p>
+            <a href="mailto:PSKMontag23@yandex.ru">PSKMontag23@yandex.ru</a>
+          </p>
+          <p>
+            <a href="https://PSK-montag.ru" target="_blank" rel="noopener noreferrer">PSK-montag.ru</a>
+          </p>
         </div>
 
         <form class="contact-form" @submit.prevent>
