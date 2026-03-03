@@ -7,7 +7,7 @@
         </router-link>
         <nav class="nav">
           <router-link to="/about" class="nav-link">О компании</router-link>
-          <router-link to="/product" class="nav-link">Продукция</router-link>
+          <router-link to="/products" class="nav-link">Продукция</router-link>
 <router-link to="/catalog" class="nav-link">Каталог</router-link>
         <router-link to="/certificates" class="nav-link">Сертификаты</router-link>
           <router-link to="/contacts" class="nav-link">Контакты</router-link>

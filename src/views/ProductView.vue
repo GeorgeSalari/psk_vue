@@ -2,64 +2,91 @@
   <AppLayout>
     <div class="page-content">
       <div class="breadcrumb">
-        <router-link to="/">Lorem</router-link>
+        <router-link to="/">Главная</router-link>
         <span> → </span>
-        <span>Ipsum</span>
+        <span>Продукция</span>
       </div>
 
-      <h1 class="page-title">Lorem ipsum dolor</h1>
+      <h1 class="page-title">Продукция</h1>
 
       <p class="intro-text">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
       </p>
 
+      <div v-if="loading" class="loading-text">Загрузка...</div>
+
       <div class="product-links">
-        <router-link to="/product/sliding-drives" class="product-link-card">
-          <div class="link-image">
-            <img :src="placeholderImg" alt="" />
-          </div>
-          <h3>Lorem ipsum dolor sit amet consectetur</h3>
-          <span class="link-arrow">Lorem Ipsum →</span>
-        </router-link>
+        <template v-if="products.length > 0">
+          <router-link
+            v-for="product in products"
+            :key="product.id"
+            :to="`/products/${product.id}`"
+            class="product-link-card"
+          >
+            <div class="link-image">
+              <img v-if="product.photo_url" :src="product.photo_url" :alt="product.name" />
+              <img v-else :src="placeholderImg" alt="" />
+            </div>
+            <h3>{{ product.name }}</h3>
+            <span class="link-arrow">Подробнее →</span>
+          </router-link>
+        </template>
 
-        <router-link to="/product/telescopic" class="product-link-card">
-          <div class="link-image">
-            <img :src="placeholderImg" alt="" />
+        <template v-if="!loading && products.length === 0">
+          <div class="product-link-card placeholder-card">
+            <div class="link-image">
+              <img :src="placeholderImg" alt="" />
+            </div>
+            <h3>Lorem ipsum dolor sit amet consectetur</h3>
+            <span class="link-arrow">Подробнее →</span>
           </div>
-          <h3>Lorem ipsum dolor sit amet</h3>
-          <span class="link-arrow">Lorem Ipsum →</span>
-        </router-link>
 
-        <router-link to="/product/proff" class="product-link-card">
-          <div class="link-image">
-            <img :src="placeholderImg" alt="" />
+          <div class="product-link-card placeholder-card">
+            <div class="link-image">
+              <img :src="placeholderImg" alt="" />
+            </div>
+            <h3>Lorem ipsum dolor sit amet</h3>
+            <span class="link-arrow">Подробнее →</span>
           </div>
-          <h3>Lorem ipsum dolor r. r.</h3>
-          <span class="link-arrow">Lorem Ipsum →</span>
-        </router-link>
-
-        <router-link to="/product/accessories" class="product-link-card">
-          <div class="link-image">
-            <img :src="placeholderImg" alt="" />
-          </div>
-          <h3>Lorem ipsum dolor</h3>
-          <span class="link-arrow">Lorem Ipsum →</span>
-        </router-link>
+        </template>
       </div>
     </div>
   </AppLayout>
 </template>
 
 <script lang="ts">
+import { defineComponent, ref, onMounted } from "vue";
 import AppLayout from "@/components/AppLayout.vue";
 import { PLACEHOLDER_IMAGE } from "@/constants/images";
+import { get } from "@/services/api";
 
-export default {
+interface Product {
+  id: number;
+  name: string;
+  description: string | null;
+  photo_url: string | null;
+  created_at: string;
+}
+
+export default defineComponent({
+  name: "ProductView",
   components: { AppLayout },
-  data() {
-    return { placeholderImg: PLACEHOLDER_IMAGE };
+  setup() {
+    const products = ref<Product[]>([]);
+    const loading = ref(true);
+    const placeholderImg = PLACEHOLDER_IMAGE;
+
+    onMounted(async () => {
+      const result = await get<Product[]>("/products");
+      if (result.ok && result.data) {
+        products.value = result.data;
+      }
+      loading.value = false;
+    });
+
+    return { products, loading, placeholderImg };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>
@@ -92,6 +119,12 @@ export default {
 .intro-text {
   margin-bottom: 3rem;
   line-height: 1.6;
+}
+
+.loading-text {
+  text-align: center;
+  color: #999;
+  padding: 2rem;
 }
 
 .product-links {
@@ -138,6 +171,14 @@ export default {
   .link-arrow {
     font-weight: 600;
     color: #333;
+  }
+}
+
+.placeholder-card {
+  cursor: default;
+
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   }
 }
 

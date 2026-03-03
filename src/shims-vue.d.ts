@@ -14,6 +14,20 @@ declare module "*.vue" {
   export default component;
 }
 
+declare module "quill" {
+  class Quill {
+    constructor(container: Element | string, options?: any);
+    root: HTMLElement;
+    getText(): string;
+    getContents(): any;
+    setContents(delta: any): any;
+    on(event: string, handler: (...args: any[]) => void): void;
+  }
+  export default Quill;
+}
+
+declare module "quill/dist/quill.snow.css" {}
+
 declare module "vue-router" {
   export interface RouteMeta {
     requiresAuth?: boolean;

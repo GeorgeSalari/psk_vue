@@ -4,7 +4,7 @@
       <div class="breadcrumb">
         <router-link to="/">Lorem</router-link>
         <span> → </span>
-        <router-link to="/product">Ipsum</router-link>
+        <router-link to="/products">Ipsum</router-link>
         <span> → </span>
         <span>Lorem ipsum</span>
       </div>

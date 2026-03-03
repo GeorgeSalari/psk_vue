@@ -10,18 +10,21 @@ import ProductSlidingDrivesView from "@/views/ProductSlidingDrivesView.vue";
 import ProductProffView from "@/views/ProductProffView.vue";
 import ProductTelescopicView from "@/views/ProductTelescopicView.vue";
 import ProductAccessoriesView from "@/views/ProductAccessoriesView.vue";
+import ProductShowView from "@/views/ProductShowView.vue";
 import AdminSignInView from "@/views/AdminSignInView.vue";
 import AdminDashboardView from "@/views/AdminDashboardView.vue";
 import AdminCertificatesView from "@/views/AdminCertificatesView.vue";
+import AdminProductsView from "@/views/AdminProductsView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   { path: "/", name: "home", component: HomeView },
   { path: "/about", name: "about", component: AboutView },
-  { path: "/product", name: "product", component: ProductView },
+  { path: "/products", name: "products", component: ProductView },
   { path: "/catalog", name: "catalog", component: CatalogView },
   { path: "/downloads", name: "downloads", component: DownloadsView },
   { path: "/certificates", name: "certificates", component: CertificatesView },
   { path: "/contacts", name: "contacts", component: ContactsView },
+  { path: "/products/:id", name: "product-show", component: ProductShowView },
   { path: "/product/sliding-drives", name: "product-sliding-drives", component: ProductSlidingDrivesView },
   { path: "/product/proff", name: "product-proff", component: ProductProffView },
   { path: "/product/telescopic", name: "product-telescopic", component: ProductTelescopicView },
@@ -38,6 +41,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/admin/certificates",
     name: "admin-certificates",
     component: AdminCertificatesView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/admin/products",
+    name: "admin-products",
+    component: AdminProductsView,
     meta: { requiresAuth: true },
   },
 ];
