@@ -15,13 +15,20 @@ declare module "*.vue" {
 }
 
 declare module "vue-router" {
+  export interface RouteMeta {
+    requiresAuth?: boolean;
+    [key: string]: any;
+  }
   export interface RouteRecordRaw {
     path: string;
     name?: string;
     component?: any;
     children?: RouteRecordRaw[];
+    meta?: RouteMeta;
     [key: string]: any;
   }
   export function createRouter(options: any): any;
   export function createWebHistory(base?: string): any;
+  export function useRouter(): any;
+  export function useRoute(): any;
 }
