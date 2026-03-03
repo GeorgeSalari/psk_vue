@@ -12,6 +12,7 @@ import ProductTelescopicView from "@/views/ProductTelescopicView.vue";
 import ProductAccessoriesView from "@/views/ProductAccessoriesView.vue";
 import AdminSignInView from "@/views/AdminSignInView.vue";
 import AdminDashboardView from "@/views/AdminDashboardView.vue";
+import AdminCertificatesView from "@/views/AdminCertificatesView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   { path: "/", name: "home", component: HomeView },
@@ -25,11 +26,18 @@ const routes: Array<RouteRecordRaw> = [
   { path: "/product/proff", name: "product-proff", component: ProductProffView },
   { path: "/product/telescopic", name: "product-telescopic", component: ProductTelescopicView },
   { path: "/product/accessories", name: "product-accessories", component: ProductAccessoriesView },
+  { path: "/admin", redirect: "/admin/dashboard" },
   { path: "/admin/sign_in", name: "admin-sign-in", component: AdminSignInView },
   {
     path: "/admin/dashboard",
     name: "admin-dashboard",
     component: AdminDashboardView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/admin/certificates",
+    name: "admin-certificates",
+    component: AdminCertificatesView,
     meta: { requiresAuth: true },
   },
 ];

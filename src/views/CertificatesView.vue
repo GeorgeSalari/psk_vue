@@ -2,25 +2,36 @@
   <AppLayout>
     <div class="page-content">
       <div class="breadcrumb">
-        <router-link to="/">Lorem</router-link>
+        <router-link to="/">Главная</router-link>
         <span> → </span>
-        <span>Elit</span>
+        <span>Сертификаты</span>
       </div>
 
-      <h1 class="page-title">Lorem ipsum dolor</h1>
+      <h1 class="page-title">Сертификаты</h1>
 
       <section class="cert-section">
-        <h2>Lorem ipsum dolor sit amet</h2>
+        <h2>Наши сертификаты качества</h2>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+          Мы гарантируем высокое качество нашей продукции. Все наши изделия сертифицированы и соответствуют требованиям стандартов.
         </p>
       </section>
 
       <section class="cert-section">
-        <h2>Lorem ipsum dolor</h2>
-        <div class="cert-images">
-          <img :src="placeholderImg" alt="" class="cert-img" />
-          <img :src="placeholderImg" alt="" class="cert-img" />
+        <div v-if="loading" class="loading-text">Загрузка...</div>
+        <div v-else class="cert-images">
+          <template v-if="certificates.length > 0">
+            <img
+              v-for="cert in certificates"
+              :key="cert.id"
+              :src="cert.photo_url"
+              :alt="cert.name"
+              class="cert-img"
+            />
+          </template>
+          <template v-else>
+            <img :src="placeholderImg" alt="" class="cert-img" />
+            <img :src="placeholderImg" alt="" class="cert-img" />
+          </template>
         </div>
       </section>
     </div>
@@ -28,15 +39,36 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, ref, onMounted } from "vue";
 import AppLayout from "@/components/AppLayout.vue";
 import { PLACEHOLDER_IMAGE } from "@/constants/images";
+import { get } from "@/services/api";
 
-export default {
+interface Certificate {
+  id: number;
+  name: string;
+  photo_url: string | null;
+  created_at: string;
+}
+
+export default defineComponent({
   components: { AppLayout },
-  data() {
-    return { placeholderImg: PLACEHOLDER_IMAGE };
+  setup() {
+    const certificates = ref<Certificate[]>([]);
+    const loading = ref(true);
+    const placeholderImg = PLACEHOLDER_IMAGE;
+
+    onMounted(async () => {
+      const result = await get<Certificate[]>("/certificates");
+      if (result.ok && result.data) {
+        certificates.value = result.data.filter((c) => c.photo_url);
+      }
+      loading.value = false;
+    });
+
+    return { certificates, loading, placeholderImg };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>
@@ -78,6 +110,12 @@ export default {
     line-height: 1.6;
     margin-bottom: 1.5rem;
   }
+}
+
+.loading-text {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
 }
 
 .cert-images {
