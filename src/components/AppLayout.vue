@@ -10,6 +10,7 @@
           <router-link to="/products" class="nav-link">Продукция</router-link>
 <router-link to="/catalog" class="nav-link">Каталог</router-link>
         <router-link to="/certificates" class="nav-link">Сертификаты</router-link>
+          <router-link v-if="hasVacancies" to="/vacancies" class="nav-link">Вакансии</router-link>
           <router-link to="/contacts" class="nav-link">Контакты</router-link>
         </nav>
       </div>
@@ -48,13 +49,25 @@
 </template>
 
 <script lang="ts">
+import { defineComponent, ref, onMounted } from "vue";
 import logoUrl from "@/assets/logo.png";
+import { get } from "@/services/api";
 
-export default {
-  data() {
-    return { logoUrl };
+export default defineComponent({
+  name: "AppLayout",
+  setup() {
+    const hasVacancies = ref(false);
+
+    onMounted(async () => {
+      const result = await get<Array<{ id: number }>>("/vacancies");
+      if (result.ok && result.data && result.data.length > 0) {
+        hasVacancies.value = true;
+      }
+    });
+
+    return { logoUrl, hasVacancies };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

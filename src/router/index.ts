@@ -15,6 +15,8 @@ import AdminSignInView from "@/views/AdminSignInView.vue";
 import AdminDashboardView from "@/views/AdminDashboardView.vue";
 import AdminCertificatesView from "@/views/AdminCertificatesView.vue";
 import AdminProductsView from "@/views/AdminProductsView.vue";
+import AdminVacanciesView from "@/views/AdminVacanciesView.vue";
+import VacanciesView from "@/views/VacanciesView.vue";
 
 const routes: Array<RouteRecordRaw> = [
   { path: "/", name: "home", component: HomeView },
@@ -24,6 +26,7 @@ const routes: Array<RouteRecordRaw> = [
   { path: "/downloads", name: "downloads", component: DownloadsView },
   { path: "/certificates", name: "certificates", component: CertificatesView },
   { path: "/contacts", name: "contacts", component: ContactsView },
+  { path: "/vacancies", name: "vacancies", component: VacanciesView },
   { path: "/products/:id", name: "product-show", component: ProductShowView },
   { path: "/product/sliding-drives", name: "product-sliding-drives", component: ProductSlidingDrivesView },
   { path: "/product/proff", name: "product-proff", component: ProductProffView },
@@ -47,6 +50,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/admin/products",
     name: "admin-products",
     component: AdminProductsView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/admin/vacancies",
+    name: "admin-vacancies",
+    component: AdminVacanciesView,
     meta: { requiresAuth: true },
   },
 ];
