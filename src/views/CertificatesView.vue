@@ -21,11 +21,12 @@
         <div v-else class="cert-images">
           <template v-if="certificates.length > 0">
             <img
-              v-for="cert in certificates"
+              v-for="(cert, idx) in certificates"
               :key="cert.id"
               :src="cert.photo_url"
               :alt="cert.name"
               class="cert-img"
+              @click="openFullscreen(idx)"
             />
           </template>
           <template v-else>
@@ -35,12 +36,21 @@
         </div>
       </section>
     </div>
+
+    <FullscreenViewer
+      :visible="fullscreenVisible"
+      :images="certificateUrls"
+      :alt="'Сертификат'"
+      :start-index="fullscreenIndex"
+      @close="fullscreenVisible = false"
+    />
   </AppLayout>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
+import { defineComponent, ref, computed, onMounted } from "vue";
 import AppLayout from "@/components/AppLayout.vue";
+import FullscreenViewer from "@/components/FullscreenViewer.vue";
 import { PLACEHOLDER_IMAGE } from "@/constants/images";
 import { get } from "@/services/api";
 
@@ -52,11 +62,22 @@ interface Certificate {
 }
 
 export default defineComponent({
-  components: { AppLayout },
+  components: { AppLayout, FullscreenViewer },
   setup() {
     const certificates = ref<Certificate[]>([]);
     const loading = ref(true);
     const placeholderImg = PLACEHOLDER_IMAGE;
+    const fullscreenVisible = ref(false);
+    const fullscreenIndex = ref(0);
+
+    const certificateUrls = computed(() =>
+      certificates.value.map((c) => c.photo_url).filter(Boolean) as string[]
+    );
+
+    const openFullscreen = (idx: number) => {
+      fullscreenIndex.value = idx;
+      fullscreenVisible.value = true;
+    };
 
     onMounted(async () => {
       const result = await get<Certificate[]>("/certificates?published=true");
@@ -66,7 +87,7 @@ export default defineComponent({
       loading.value = false;
     });
 
-    return { certificates, loading, placeholderImg };
+    return { certificates, loading, placeholderImg, fullscreenVisible, fullscreenIndex, certificateUrls, openFullscreen };
   },
 });
 </script>
@@ -128,6 +149,13 @@ export default defineComponent({
     height: auto;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      transform: scale(1.03);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
   }
 }
 </style>
