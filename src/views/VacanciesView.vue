@@ -51,7 +51,7 @@ export default defineComponent({
     const loading = ref(true);
 
     onMounted(async () => {
-      const result = await get<Vacancy[]>("/vacancies");
+      const result = await get<Vacancy[]>("/vacancies?published=true");
       if (result.ok && result.data) {
         vacancies.value = result.data;
       }

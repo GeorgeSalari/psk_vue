@@ -95,6 +95,36 @@ export async function put<T = unknown>(
   }
 }
 
+export async function patch<T = unknown>(
+  path: string,
+  body: Record<string, unknown> | FormData = {}
+): Promise<ApiResponse<T>> {
+  try {
+    const isFormData = body instanceof FormData;
+    const headers: Record<string, string> = {
+      ...authHeaders(),
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
+    };
+    const response = await fetch(`${API_BASE_URL}${path}`, {
+      method: "PATCH",
+      headers,
+      body: isFormData ? body : JSON.stringify(body),
+    });
+    if (response.status === 204) {
+      return { ok: true };
+    }
+    if (!response.ok) {
+      handleUnauthorized(response);
+      const data = await response.json();
+      return { ok: false, error: data.error || data.errors?.join(", ") || "Request failed" };
+    }
+    const data = await response.json();
+    return { ok: true, data };
+  } catch {
+    return { ok: false, error: "Network error" };
+  }
+}
+
 export async function del<T = unknown>(
   path: string
 ): Promise<ApiResponse<T>> {

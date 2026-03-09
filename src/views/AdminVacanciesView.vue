@@ -1,46 +1,78 @@
 <template>
   <AdminLayout>
-    <div class="vacancies-page">
-      <div class="vacancies-header">
+    <div class="admin-page">
+      <div class="page-header">
         <h1>Вакансии</h1>
         <button class="btn btn-primary" @click="openCreateModal">+ Добавить</button>
       </div>
 
-      <div v-if="loading" class="loading">Загрузка...</div>
-
-      <div v-else-if="vacancies.length === 0" class="empty-state">
-        Вакансии не найдены
+      <div class="tabs">
+        <button class="tab" :class="{ active: activeTab === 'published' }" @click="activeTab = 'published'">
+          Опубликованные ({{ published.length }})
+        </button>
+        <button class="tab" :class="{ active: activeTab === 'hidden' }" @click="activeTab = 'hidden'">
+          Спрятанные ({{ hidden.length }})
+        </button>
       </div>
 
-      <div v-else class="vacancies-grid">
-        <div v-for="vacancy in vacancies" :key="vacancy.id" class="vacancy-card">
-          <img
-            v-if="vacancy.photo_url"
-            :src="vacancy.photo_url"
-            :alt="vacancy.name"
-            class="vacancy-thumb"
-          />
-          <div v-else class="vacancy-thumb vacancy-placeholder">Нет фото</div>
-          <div class="vacancy-info">
-            <span class="vacancy-name">{{ vacancy.name }}</span>
-            <p class="vacancy-desc-preview" v-html="truncate(vacancy.description)"></p>
-            <div class="vacancy-actions">
-              <button class="btn btn-small btn-outline" @click="openEditModal(vacancy)">
-                Редактировать
-              </button>
-              <button class="btn btn-small btn-danger" @click="openDeleteConfirm(vacancy)">
-                Удалить
-              </button>
+      <div v-if="loading" class="loading">Загрузка...</div>
+
+      <template v-else>
+        <div v-if="activeTab === 'published'">
+          <div v-if="published.length === 0" class="empty-state">Нет опубликованных вакансий</div>
+          <div v-else class="items-grid">
+            <div
+              v-for="(item, idx) in published"
+              :key="item.id"
+              class="item-card"
+              draggable="true"
+              @dragstart="onDragStart(idx)"
+              @dragover.prevent="onDragOver(idx)"
+              @drop="onDrop(idx)"
+              @dragend="onDragEnd"
+              :class="{ dragging: dragIdx === idx, 'drag-over': dragOverIdx === idx }"
+            >
+              <div class="drag-handle">⠿</div>
+              <img v-if="item.photo_url" :src="item.photo_url" :alt="item.name" class="item-thumb" />
+              <div v-else class="item-thumb item-placeholder">Нет фото</div>
+              <div class="item-info">
+                <span class="item-name">{{ item.name }}</span>
+                <p class="item-desc-preview" v-html="truncate(item.description)"></p>
+                <div class="item-actions">
+                  <button class="btn btn-small btn-warning" @click="toggleDisplay(item)">Спрятать</button>
+                  <button class="btn btn-small btn-outline" @click="openEditModal(item)">Редактировать</button>
+                  <button class="btn btn-small btn-danger" @click="openDeleteConfirm(item)">Удалить</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+
+        <div v-if="activeTab === 'hidden'">
+          <div v-if="hidden.length === 0" class="empty-state">Нет спрятанных вакансий</div>
+          <div v-else class="items-grid">
+            <div v-for="item in hidden" :key="item.id" class="item-card">
+              <img v-if="item.photo_url" :src="item.photo_url" :alt="item.name" class="item-thumb" />
+              <div v-else class="item-thumb item-placeholder">Нет фото</div>
+              <div class="item-info">
+                <span class="item-name">{{ item.name }}</span>
+                <p class="item-desc-preview" v-html="truncate(item.description)"></p>
+                <div class="item-actions">
+                  <button class="btn btn-small btn-success" @click="toggleDisplay(item)">Показать</button>
+                  <button class="btn btn-small btn-outline" @click="openEditModal(item)">Редактировать</button>
+                  <button class="btn btn-small btn-danger" @click="openDeleteConfirm(item)">Удалить</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </template>
     </div>
 
     <!-- Create / Edit Modal -->
     <div v-if="showModal" class="modal-overlay" @click.self="closeModal">
       <div class="modal modal-wide">
-        <h2>{{ editingVacancy ? "Редактировать вакансию" : "Новая вакансия" }}</h2>
+        <h2>{{ editingItem ? "Редактировать вакансию" : "Новая вакансия" }}</h2>
         <form @submit.prevent="handleSave">
           <div class="form-group">
             <label>Название</label>
@@ -72,7 +104,7 @@
     <div v-if="showDeleteConfirm" class="modal-overlay" @click.self="closeDeleteConfirm">
       <div class="modal modal-small">
         <h2>Удалить вакансию?</h2>
-        <p>Вы уверены, что хотите удалить «{{ deletingVacancy?.name }}»?</p>
+        <p>Вы уверены, что хотите удалить «{{ deletingItem?.name }}»?</p>
         <div class="modal-actions">
           <button class="btn btn-outline" @click="closeDeleteConfirm">Нет</button>
           <button class="btn btn-danger" :disabled="deleting" @click="handleDelete">
@@ -85,9 +117,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted, watch, nextTick } from "vue";
+import { defineComponent, ref, computed, onMounted, watch, nextTick } from "vue";
 import AdminLayout from "@/components/AdminLayout.vue";
-import { get, post, put, del } from "@/services/api";
+import { get, post, put, del, patch } from "@/services/api";
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 
@@ -96,6 +128,8 @@ interface Vacancy {
   name: string;
   description: string | null;
   photo_url: string | null;
+  display: boolean;
+  position: number;
   created_at: string;
 }
 
@@ -103,11 +137,17 @@ export default defineComponent({
   name: "AdminVacanciesView",
   components: { AdminLayout },
   setup() {
-    const vacancies = ref<Vacancy[]>([]);
+    const items = ref<Vacancy[]>([]);
     const loading = ref(true);
+    const activeTab = ref("published");
+
+    const published = computed(() =>
+      items.value.filter((i) => i.display).sort((a, b) => a.position - b.position)
+    );
+    const hidden = computed(() => items.value.filter((i) => !i.display));
 
     const showModal = ref(false);
-    const editingVacancy = ref<Vacancy | null>(null);
+    const editingItem = ref<Vacancy | null>(null);
     const formName = ref("");
     const formFile = ref<File | null>(null);
     const previewUrl = ref<string | null>(null);
@@ -115,22 +155,23 @@ export default defineComponent({
     const saving = ref(false);
 
     const showDeleteConfirm = ref(false);
-    const deletingVacancy = ref<Vacancy | null>(null);
+    const deletingItem = ref<Vacancy | null>(null);
     const deleting = ref(false);
 
     const editorContainer = ref<HTMLElement | null>(null);
     let quillInstance: Quill | null = null;
 
-    const fetchVacancies = async () => {
+    const dragIdx = ref<number | null>(null);
+    const dragOverIdx = ref<number | null>(null);
+
+    const fetchItems = async () => {
       loading.value = true;
       const result = await get<Vacancy[]>("/vacancies");
-      if (result.ok && result.data) {
-        vacancies.value = result.data;
-      }
+      if (result.ok && result.data) items.value = result.data;
       loading.value = false;
     };
 
-    onMounted(fetchVacancies);
+    onMounted(fetchItems);
 
     const initQuill = () => {
       if (editorContainer.value && !quillInstance) {
@@ -154,13 +195,7 @@ export default defineComponent({
       if (val) {
         await nextTick();
         initQuill();
-        if (quillInstance) {
-          if (editingVacancy.value?.description) {
-            quillInstance.root.innerHTML = editingVacancy.value.description;
-          } else {
-            quillInstance.root.innerHTML = "";
-          }
-        }
+        if (quillInstance) quillInstance.root.innerHTML = editingItem.value?.description || "";
       } else {
         quillInstance = null;
       }
@@ -171,11 +206,30 @@ export default defineComponent({
       const div = document.createElement("div");
       div.innerHTML = html;
       const text = div.textContent || "";
-      return text.length > 120 ? text.substring(0, 120) + "..." : text;
+      return text.length > 100 ? text.substring(0, 100) + "..." : text;
     };
 
+    const toggleDisplay = async (item: Vacancy) => {
+      await patch(`/vacancies/${item.id}/toggle_display`);
+      await fetchItems();
+    };
+
+    const onDragStart = (idx: number) => { dragIdx.value = idx; };
+    const onDragOver = (idx: number) => { dragOverIdx.value = idx; };
+    const onDrop = async (idx: number) => {
+      if (dragIdx.value === null || dragIdx.value === idx) return;
+      const list = [...published.value];
+      const [moved] = list.splice(dragIdx.value, 1);
+      list.splice(idx, 0, moved);
+      dragIdx.value = null;
+      dragOverIdx.value = null;
+      await patch("/vacancies/reorder", { ids: list.map((i) => i.id) });
+      await fetchItems();
+    };
+    const onDragEnd = () => { dragIdx.value = null; dragOverIdx.value = null; };
+
     const openCreateModal = () => {
-      editingVacancy.value = null;
+      editingItem.value = null;
       formName.value = "";
       formFile.value = null;
       previewUrl.value = null;
@@ -183,346 +237,72 @@ export default defineComponent({
       showModal.value = true;
     };
 
-    const openEditModal = (vacancy: Vacancy) => {
-      editingVacancy.value = vacancy;
-      formName.value = vacancy.name;
+    const openEditModal = (item: Vacancy) => {
+      editingItem.value = item;
+      formName.value = item.name;
       formFile.value = null;
-      previewUrl.value = vacancy.photo_url;
+      previewUrl.value = item.photo_url;
       formError.value = "";
       showModal.value = true;
     };
 
-    const closeModal = () => {
-      showModal.value = false;
-    };
+    const closeModal = () => { showModal.value = false; };
 
     const onFileChange = (e: Event) => {
       const target = e.target as HTMLInputElement;
       const file = target.files?.[0] || null;
       formFile.value = file;
-      if (file) {
-        previewUrl.value = URL.createObjectURL(file);
-      }
+      if (file) previewUrl.value = URL.createObjectURL(file);
     };
 
     const handleSave = async () => {
       formError.value = "";
       saving.value = true;
-
       const description = quillInstance ? quillInstance.root.innerHTML : "";
-
       const fd = new FormData();
       fd.append("name", formName.value);
       fd.append("description", description);
-      if (formFile.value) {
-        fd.append("photo", formFile.value);
-      }
+      if (formFile.value) fd.append("photo", formFile.value);
 
-      let result;
-      if (editingVacancy.value) {
-        result = await put<Vacancy>(
-          `/vacancies/${editingVacancy.value.id}`,
-          fd
-        );
-      } else {
-        result = await post<Vacancy>("/vacancies", fd);
-      }
+      const result = editingItem.value
+        ? await put<Vacancy>(`/vacancies/${editingItem.value.id}`, fd)
+        : await post<Vacancy>("/vacancies", fd);
 
       saving.value = false;
-
-      if (result.ok) {
-        closeModal();
-        await fetchVacancies();
-      } else {
-        formError.value = result.error || "Ошибка сохранения";
-      }
+      if (result.ok) { closeModal(); await fetchItems(); }
+      else { formError.value = result.error || "Ошибка сохранения"; }
     };
 
-    const openDeleteConfirm = (vacancy: Vacancy) => {
-      deletingVacancy.value = vacancy;
+    const openDeleteConfirm = (item: Vacancy) => {
+      deletingItem.value = item;
       showDeleteConfirm.value = true;
     };
 
     const closeDeleteConfirm = () => {
       showDeleteConfirm.value = false;
-      deletingVacancy.value = null;
+      deletingItem.value = null;
     };
 
     const handleDelete = async () => {
-      if (!deletingVacancy.value) return;
+      if (!deletingItem.value) return;
       deleting.value = true;
-      const result = await del(`/vacancies/${deletingVacancy.value.id}`);
+      const result = await del(`/vacancies/${deletingItem.value.id}`);
       deleting.value = false;
-      if (result.ok) {
-        closeDeleteConfirm();
-        await fetchVacancies();
-      }
+      if (result.ok) { closeDeleteConfirm(); await fetchItems(); }
     };
 
     return {
-      vacancies,
-      loading,
-      showModal,
-      editingVacancy,
-      formName,
-      previewUrl,
-      formError,
-      saving,
-      showDeleteConfirm,
-      deletingVacancy,
-      deleting,
-      editorContainer,
-      truncate,
-      openCreateModal,
-      openEditModal,
-      closeModal,
-      onFileChange,
-      handleSave,
-      openDeleteConfirm,
-      closeDeleteConfirm,
-      handleDelete,
+      loading, activeTab, published, hidden,
+      showModal, editingItem, formName, previewUrl, formError, saving,
+      showDeleteConfirm, deletingItem, deleting,
+      editorContainer, dragIdx, dragOverIdx,
+      truncate, toggleDisplay,
+      onDragStart, onDragOver, onDrop, onDragEnd,
+      openCreateModal, openEditModal, closeModal, onFileChange, handleSave,
+      openDeleteConfirm, closeDeleteConfirm, handleDelete,
     };
   },
 });
 </script>
 
-<style scoped>
-.vacancies-page {
-  padding: 32px;
-}
-
-.vacancies-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.vacancies-header h1 {
-  font-size: 24px;
-  font-weight: 600;
-  color: #1a1a2e;
-  margin: 0;
-}
-
-.loading,
-.empty-state {
-  text-align: center;
-  padding: 48px;
-  color: #6b7280;
-  font-size: 15px;
-}
-
-.vacancies-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
-}
-
-.vacancy-card {
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-  overflow: hidden;
-}
-
-.vacancy-thumb {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  display: block;
-}
-
-.vacancy-placeholder {
-  background: #e5e7eb;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #9ca3af;
-  font-size: 14px;
-}
-
-.vacancy-info {
-  padding: 16px;
-}
-
-.vacancy-name {
-  font-weight: 600;
-  color: #1a1a2e;
-  display: block;
-  margin-bottom: 6px;
-  font-size: 16px;
-}
-
-.vacancy-desc-preview {
-  color: #6b7280;
-  font-size: 13px;
-  line-height: 1.4;
-  margin: 0 0 12px;
-}
-
-.vacancy-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.btn {
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  border: none;
-  transition: all 0.15s;
-}
-
-.btn-primary {
-  background: #4f46e5;
-  color: #fff;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background: #4338ca;
-}
-
-.btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.btn-outline {
-  background: #fff;
-  color: #374151;
-  border: 1px solid #d1d5db;
-}
-
-.btn-outline:hover {
-  background: #f9fafb;
-}
-
-.btn-danger {
-  background: #dc2626;
-  color: #fff;
-}
-
-.btn-danger:hover:not(:disabled) {
-  background: #b91c1c;
-}
-
-.btn-danger:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.btn-small {
-  padding: 6px 12px;
-  font-size: 13px;
-}
-
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.modal {
-  background: #fff;
-  border-radius: 12px;
-  padding: 28px;
-  width: 100%;
-  max-width: 480px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-.modal-wide {
-  max-width: 680px;
-}
-
-.modal-small {
-  max-width: 400px;
-}
-
-.modal h2 {
-  margin: 0 0 20px;
-  font-size: 20px;
-  color: #1a1a2e;
-}
-
-.modal p {
-  color: #4b5563;
-  margin: 0 0 20px;
-  line-height: 1.5;
-}
-
-.form-group {
-  margin-bottom: 16px;
-}
-
-.form-group label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
-}
-
-.form-group input[type="text"] {
-  width: 100%;
-  padding: 10px 14px;
-  font-size: 15px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  outline: none;
-  box-sizing: border-box;
-  transition: border-color 0.2s;
-}
-
-.form-group input[type="text"]:focus {
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-}
-
-.form-group input[type="file"] {
-  font-size: 14px;
-}
-
-.quill-editor {
-  min-height: 150px;
-  background: #fff;
-  border-radius: 0 0 8px 8px;
-}
-
-.image-preview {
-  margin-top: 12px;
-}
-
-.image-preview img {
-  max-width: 100%;
-  max-height: 200px;
-  border-radius: 8px;
-  border: 1px solid #e5e7eb;
-}
-
-.form-error {
-  background: #fef2f2;
-  color: #dc2626;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 14px;
-  margin-bottom: 16px;
-  border: 1px solid #fecaca;
-}
-
-.modal-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
-}
-</style>
+<style scoped src="@/assets/admin-crud.css"></style>

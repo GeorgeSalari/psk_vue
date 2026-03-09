@@ -59,7 +59,7 @@ export default defineComponent({
     const placeholderImg = PLACEHOLDER_IMAGE;
 
     onMounted(async () => {
-      const result = await get<Certificate[]>("/certificates");
+      const result = await get<Certificate[]>("/certificates?published=true");
       if (result.ok && result.data) {
         certificates.value = result.data.filter((c) => c.photo_url);
       }

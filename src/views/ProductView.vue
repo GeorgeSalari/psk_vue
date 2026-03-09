@@ -20,7 +20,7 @@
           <router-link
             v-for="product in products"
             :key="product.id"
-            :to="`/products/${product.id}`"
+            :to="`/products/${product.slug}`"
             class="product-link-card"
           >
             <div class="link-image">
@@ -68,6 +68,7 @@ import { get } from "@/services/api";
 
 interface Product {
   id: number;
+  slug: string;
   name: string;
   description: string | null;
   photo_urls: string[];
@@ -83,7 +84,7 @@ export default defineComponent({
     const placeholderImg = PLACEHOLDER_IMAGE;
 
     onMounted(async () => {
-      const result = await get<Product[]>("/products");
+      const result = await get<Product[]>("/products?published=true");
       if (result.ok && result.data) {
         products.value = result.data;
       }

@@ -59,7 +59,7 @@ export default defineComponent({
     const hasVacancies = ref(false);
 
     onMounted(async () => {
-      const result = await get<Array<{ id: number }>>("/vacancies");
+      const result = await get<Array<{ id: number }>>("/vacancies?published=true");
       if (result.ok && result.data && result.data.length > 0) {
         hasVacancies.value = true;
       }

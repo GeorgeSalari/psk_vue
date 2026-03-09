@@ -43,7 +43,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import AppLayout from "@/components/AppLayout.vue";
 import ImageCarousel from "@/components/ImageCarousel.vue";
 import FullscreenViewer from "@/components/FullscreenViewer.vue";
@@ -51,6 +51,7 @@ import { get } from "@/services/api";
 
 interface Product {
   id: number;
+  slug: string;
   name: string;
   description: string | null;
   photo_urls: string[];
@@ -62,6 +63,7 @@ export default defineComponent({
   components: { AppLayout, ImageCarousel, FullscreenViewer },
   setup() {
     const route = useRoute();
+    const router = useRouter();
     const product = ref<Product | null>(null);
     const loading = ref(true);
     const error = ref("");
@@ -70,12 +72,13 @@ export default defineComponent({
     const fullscreenIndex = ref(0);
 
     onMounted(async () => {
-      const id = route.params.id;
-      const result = await get<Product>(`/products/${id}`);
+      const slug = route.params.slug;
+      const result = await get<Product>(`/products/${slug}`);
       if (result.ok && result.data) {
         product.value = result.data;
       } else {
-        error.value = result.error || "Продукт не найден";
+        router.replace("/products");
+        return;
       }
       loading.value = false;
     });

@@ -27,7 +27,7 @@ const routes: Array<RouteRecordRaw> = [
   { path: "/certificates", name: "certificates", component: CertificatesView },
   { path: "/contacts", name: "contacts", component: ContactsView },
   { path: "/vacancies", name: "vacancies", component: VacanciesView },
-  { path: "/products/:id", name: "product-show", component: ProductShowView },
+  { path: "/products/:slug", name: "product-show", component: ProductShowView },
   { path: "/product/sliding-drives", name: "product-sliding-drives", component: ProductSlidingDrivesView },
   { path: "/product/proff", name: "product-proff", component: ProductProffView },
   { path: "/product/telescopic", name: "product-telescopic", component: ProductTelescopicView },
