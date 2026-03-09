@@ -14,18 +14,30 @@
           <span>{{ product.name }}</span>
         </div>
 
-        <h1 class="page-title">{{ product.name }}</h1>
-
-        <div class="product-detail">
-          <div class="product-image" v-if="product.photo_url">
-            <img :src="product.photo_url" :alt="product.name" />
+        <div class="product-layout">
+          <div class="product-gallery" v-if="product.photo_urls && product.photo_urls.length > 0">
+            <ImageCarousel
+              :images="product.photo_urls"
+              :alt="product.name"
+              height="400px"
+              @click="openFullscreen"
+            />
           </div>
-          <div class="product-body" v-if="product.description">
-            <div class="product-description" v-html="product.description"></div>
+          <div class="product-content">
+            <h1 class="product-title">{{ product.name }}</h1>
+            <div v-if="product.description" class="product-description" v-html="product.description"></div>
           </div>
         </div>
       </template>
     </div>
+
+    <FullscreenViewer
+      :visible="fullscreenVisible"
+      :images="product?.photo_urls || []"
+      :alt="product?.name || ''"
+      :start-index="fullscreenIndex"
+      @close="fullscreenVisible = false"
+    />
   </AppLayout>
 </template>
 
@@ -33,24 +45,29 @@
 import { defineComponent, ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import AppLayout from "@/components/AppLayout.vue";
+import ImageCarousel from "@/components/ImageCarousel.vue";
+import FullscreenViewer from "@/components/FullscreenViewer.vue";
 import { get } from "@/services/api";
 
 interface Product {
   id: number;
   name: string;
   description: string | null;
-  photo_url: string | null;
+  photo_urls: string[];
   created_at: string;
 }
 
 export default defineComponent({
   name: "ProductShowView",
-  components: { AppLayout },
+  components: { AppLayout, ImageCarousel, FullscreenViewer },
   setup() {
     const route = useRoute();
     const product = ref<Product | null>(null);
     const loading = ref(true);
     const error = ref("");
+
+    const fullscreenVisible = ref(false);
+    const fullscreenIndex = ref(0);
 
     onMounted(async () => {
       const id = route.params.id;
@@ -63,14 +80,19 @@ export default defineComponent({
       loading.value = false;
     });
 
-    return { product, loading, error };
+    const openFullscreen = (index: number) => {
+      fullscreenIndex.value = index;
+      fullscreenVisible.value = true;
+    };
+
+    return { product, loading, error, fullscreenVisible, fullscreenIndex, openFullscreen };
   },
 });
 </script>
 
 <style lang="scss" scoped>
 .page-content {
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 2rem;
 }
@@ -101,57 +123,67 @@ export default defineComponent({
   }
 }
 
-.page-title {
-  font-size: 2rem;
-  margin-bottom: 2rem;
+.product-layout {
+  display: flex;
+  gap: 3rem;
+  align-items: flex-start;
 }
 
-.product-detail {
-  margin-bottom: 3rem;
+.product-gallery {
+  flex-shrink: 0;
+  width: 480px;
+}
 
-  .product-image {
-    margin-bottom: 2rem;
-    border-radius: 8px;
-    overflow: hidden;
+.product-content {
+  flex: 1;
+  min-width: 0;
+}
 
-    img {
-      width: 100%;
-      height: auto;
-      max-height: 500px;
-      object-fit: cover;
-    }
+.product-title {
+  font-size: 1.8rem;
+  margin: 0 0 1.5rem;
+  color: #1a1a2e;
+}
+
+.product-description {
+  line-height: 1.8;
+  font-size: 1.05rem;
+  color: #333;
+
+  :deep(h1),
+  :deep(h2),
+  :deep(h3) {
+    margin: 1.5rem 0 0.75rem;
+    color: #1a1a2e;
   }
 
-  .product-description {
-    line-height: 1.8;
-    font-size: 1.05rem;
-    color: #333;
+  :deep(p) {
+    margin: 0 0 1rem;
+  }
 
-    :deep(h1),
-    :deep(h2),
-    :deep(h3) {
-      margin: 1.5rem 0 0.75rem;
-      color: #1a1a2e;
-    }
+  :deep(ul),
+  :deep(ol) {
+    margin: 0 0 1rem;
+    padding-left: 1.5rem;
+  }
 
-    :deep(p) {
-      margin: 0 0 1rem;
-    }
+  :deep(strong) {
+    font-weight: 600;
+  }
 
-    :deep(ul),
-    :deep(ol) {
-      margin: 0 0 1rem;
-      padding-left: 1.5rem;
-    }
+  :deep(a) {
+    color: #4f46e5;
+    text-decoration: underline;
+  }
+}
 
-    :deep(strong) {
-      font-weight: 600;
-    }
+@media (max-width: 768px) {
+  .product-layout {
+    flex-direction: column;
+  }
 
-    :deep(a) {
-      color: #4f46e5;
-      text-decoration: underline;
-    }
+  .product-gallery {
+    width: 100%;
   }
 }
 </style>

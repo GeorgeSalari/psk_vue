@@ -12,6 +12,15 @@ function authHeaders(): Record<string, string> {
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
+function handleUnauthorized(response: Response): void {
+  if (response.status === 401 && localStorage.getItem("admin_token")) {
+    localStorage.removeItem("admin_token");
+    if (window.location.pathname.startsWith("/admin")) {
+      window.location.href = "/admin/sign_in";
+    }
+  }
+}
+
 export async function get<T = unknown>(
   path: string
 ): Promise<ApiResponse<T>> {
@@ -20,10 +29,12 @@ export async function get<T = unknown>(
       method: "GET",
       headers: { ...authHeaders() },
     });
-    const data = await response.json();
     if (!response.ok) {
+      handleUnauthorized(response);
+      const data = await response.json();
       return { ok: false, error: data.error || data.errors?.join(", ") || "Request failed" };
     }
+    const data = await response.json();
     return { ok: true, data };
   } catch {
     return { ok: false, error: "Network error" };
@@ -45,10 +56,12 @@ export async function post<T = unknown>(
       headers,
       body: isFormData ? body : JSON.stringify(body),
     });
-    const data = await response.json();
     if (!response.ok) {
+      handleUnauthorized(response);
+      const data = await response.json();
       return { ok: false, error: data.error || data.errors?.join(", ") || "Request failed" };
     }
+    const data = await response.json();
     return { ok: true, data };
   } catch {
     return { ok: false, error: "Network error" };
@@ -70,10 +83,12 @@ export async function put<T = unknown>(
       headers,
       body: isFormData ? body : JSON.stringify(body),
     });
-    const data = await response.json();
     if (!response.ok) {
+      handleUnauthorized(response);
+      const data = await response.json();
       return { ok: false, error: data.error || data.errors?.join(", ") || "Request failed" };
     }
+    const data = await response.json();
     return { ok: true, data };
   } catch {
     return { ok: false, error: "Network error" };
@@ -91,10 +106,12 @@ export async function del<T = unknown>(
     if (response.status === 204) {
       return { ok: true };
     }
-    const data = await response.json();
     if (!response.ok) {
+      handleUnauthorized(response);
+      const data = await response.json();
       return { ok: false, error: data.error || data.errors?.join(", ") || "Request failed" };
     }
+    const data = await response.json();
     return { ok: true, data };
   } catch {
     return { ok: false, error: "Network error" };

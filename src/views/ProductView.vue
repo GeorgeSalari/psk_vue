@@ -24,7 +24,12 @@
             class="product-link-card"
           >
             <div class="link-image">
-              <img v-if="product.photo_url" :src="product.photo_url" :alt="product.name" />
+              <ImageCarousel
+                v-if="product.photo_urls && product.photo_urls.length > 0"
+                :images="product.photo_urls"
+                :alt="product.name"
+                height="150px"
+              />
               <img v-else :src="placeholderImg" alt="" />
             </div>
             <h3>{{ product.name }}</h3>
@@ -57,6 +62,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted } from "vue";
 import AppLayout from "@/components/AppLayout.vue";
+import ImageCarousel from "@/components/ImageCarousel.vue";
 import { PLACEHOLDER_IMAGE } from "@/constants/images";
 import { get } from "@/services/api";
 
@@ -64,13 +70,13 @@ interface Product {
   id: number;
   name: string;
   description: string | null;
-  photo_url: string | null;
+  photo_urls: string[];
   created_at: string;
 }
 
 export default defineComponent({
   name: "ProductView",
-  components: { AppLayout },
+  components: { AppLayout, ImageCarousel },
   setup() {
     const products = ref<Product[]>([]);
     const loading = ref(true);
@@ -150,15 +156,15 @@ export default defineComponent({
 
   .link-image {
     flex-shrink: 0;
-    width: 200px;
-    height: 130px;
+    width: 220px;
+    height: 150px;
     border-radius: 4px;
     overflow: hidden;
 
     img {
-      width: 100%;
       height: 100%;
-      object-fit: cover;
+      width: auto;
+      display: block;
     }
   }
 
@@ -189,7 +195,13 @@ export default defineComponent({
 
     .link-image {
       width: 100%;
-      height: 180px;
+      height: 200px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
     }
   }
 }
