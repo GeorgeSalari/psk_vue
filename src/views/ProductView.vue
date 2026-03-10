@@ -22,6 +22,7 @@
             :key="product.id"
             :to="`/products/${product.slug}`"
             class="product-link-card"
+            @click="onProductClick(product)"
           >
             <div class="link-image">
               <ImageCarousel
@@ -65,6 +66,7 @@ import AppLayout from "@/components/AppLayout.vue";
 import ImageCarousel from "@/components/ImageCarousel.vue";
 import { PLACEHOLDER_IMAGE } from "@/constants/images";
 import { get } from "@/services/api";
+import { trackClick } from "@/services/analytics";
 
 interface Product {
   id: number;
@@ -91,7 +93,11 @@ export default defineComponent({
       loading.value = false;
     });
 
-    return { products, loading, placeholderImg };
+    const onProductClick = (product: Product) => {
+      trackClick("product_click", { name: product.name, slug: product.slug });
+    };
+
+    return { products, loading, placeholderImg, onProductClick };
   },
 });
 </script>

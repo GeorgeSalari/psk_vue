@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import { trackView } from "@/services/analytics";
 import HomeView from "@/views/HomeView.vue";
 import AboutView from "@/views/AboutView.vue";
 import ProductView from "@/views/ProductView.vue";
@@ -81,6 +82,12 @@ router.beforeEach((to: any, _from: any, next: any) => {
     }
   }
   next();
+});
+
+router.afterEach((to: any) => {
+  if (!to.path.startsWith("/admin")) {
+    trackView(to.fullPath || to.path);
+  }
 });
 
 export default router;

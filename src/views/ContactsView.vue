@@ -5,8 +5,8 @@
       <section class="contact-hero">
         <h2 class="contact-hero-title">Свяжитесь с нами</h2>
         <div class="contact-hero-links">
-          <a href="tel:+79180301137" class="contact-hero-link">8 (918) 030-11-37</a>
-          <a href="tel:+79627667256" class="contact-hero-link">8 (962) 766-72-56</a>
+          <a href="tel:+79180301137" class="contact-hero-link" @click="trackPhone('89180301137')">8 (918) 030-11-37</a>
+          <a href="tel:+79627667256" class="contact-hero-link" @click="trackPhone('89627667256')">8 (962) 766-72-56</a>
         </div>
         <a href="mailto:PSKMontag23@yandex.ru" class="contact-hero-email">PSKMontag23@yandex.ru</a>
       </section>
@@ -26,8 +26,8 @@
             <p class="contact-address">Республика Адыгея, хутор Новый Сад, ул. Дорожная, 1</p>
             <p class="contact-tax">ИНН 2312338712, КПП 231201001</p>
             <p class="contact-phone">
-              <a href="tel:+79180301137">8 (918) 030-11-37</a>,
-              <a href="tel:+79627667256">8 (962) 766-72-56</a>
+              <a href="tel:+79180301137" @click="trackPhone('89180301137')">8 (918) 030-11-37</a>,
+              <a href="tel:+79627667256" @click="trackPhone('89627667256')">8 (962) 766-72-56</a>
             </p>
             <p class="contact-email">
               <a href="mailto:PSKMontag23@yandex.ru">PSKMontag23@yandex.ru</a>
@@ -51,9 +51,15 @@
 import { defineComponent } from "vue";
 import AppLayout from "@/components/AppLayout.vue";
 import ContactForm from "@/components/ContactForm.vue";
+import { trackClick } from "@/services/analytics";
 
 export default defineComponent({
   components: { AppLayout, ContactForm },
+  methods: {
+    trackPhone(phone: string) {
+      trackClick("phone_click", { phone, page: "/contacts" });
+    },
+  },
 });
 </script>
 

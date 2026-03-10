@@ -30,8 +30,8 @@
         <div class="footer-section footer-contact">
           <p class="footer-company">Завод стальных дверей «ПСК Монтаж»</p>
           <p>
-            <a href="tel:+79180301137">8 (918) 030-11-37</a>,
-            <a href="tel:+79627667256">8 (962) 766-72-56</a>
+            <a href="tel:+79180301137" @click="trackPhone('89180301137')">8 (918) 030-11-37</a>,
+            <a href="tel:+79627667256" @click="trackPhone('89627667256')">8 (962) 766-72-56</a>
           </p>
           <p>
             <a href="mailto:PSKMontag23@yandex.ru">PSKMontag23@yandex.ru</a>
@@ -52,6 +52,7 @@
 import { defineComponent, ref, onMounted } from "vue";
 import logoUrl from "@/assets/logo.png";
 import { get } from "@/services/api";
+import { trackClick } from "@/services/analytics";
 
 export default defineComponent({
   name: "AppLayout",
@@ -65,7 +66,11 @@ export default defineComponent({
       }
     });
 
-    return { logoUrl, hasVacancies };
+    const trackPhone = (phone: string) => {
+      trackClick("phone_click", { phone });
+    };
+
+    return { logoUrl, hasVacancies, trackPhone };
   },
 });
 </script>

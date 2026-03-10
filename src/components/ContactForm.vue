@@ -44,6 +44,7 @@
 <script lang="ts">
 import { defineComponent, ref, reactive } from "vue";
 import { post } from "@/services/api";
+import { trackClick } from "@/services/analytics";
 
 const RUSSIAN_PHONE_REGEX = /^(\+7|8)\d{10}$/;
 
@@ -114,6 +115,7 @@ export default defineComponent({
       submitting.value = false;
 
       if (result.ok) {
+        trackClick("form_submit", { page: window.location.pathname });
         submitSuccess.value = true;
         form.contact_name = "";
         form.phone = "";

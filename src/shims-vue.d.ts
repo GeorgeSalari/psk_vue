@@ -28,6 +28,25 @@ declare module "quill" {
 
 declare module "quill/dist/quill.snow.css" {}
 
+declare module "ahoy.js" {
+  interface AhoyConfig {
+    visitsUrl?: string;
+    eventsUrl?: string;
+    cookies?: boolean;
+    trackVisits?: boolean;
+    visitDuration?: number;
+    withCredentials?: boolean;
+    [key: string]: any;
+  }
+  const ahoy: {
+    configure(config: AhoyConfig): void;
+    trackView(properties?: Record<string, any>): void;
+    track(name: string, properties?: Record<string, any>): void;
+    reset(): void;
+  };
+  export default ahoy;
+}
+
 declare module "vue-router" {
   export interface RouteMeta {
     requiresAuth?: boolean;

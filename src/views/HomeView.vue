@@ -7,7 +7,7 @@
           <h1 class="hero-title">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor.
           </h1>
-          <a href="#" class="hero-cta">Lorem Ipsum</a>
+          <a href="#" class="hero-cta" @click="trackHeroCta">Lorem Ipsum</a>
         </div>
         <div class="hero-image">
           <img :src="placeholderImg" alt="" />
@@ -109,11 +109,17 @@
 import AppLayout from "@/components/AppLayout.vue";
 import ContactForm from "@/components/ContactForm.vue";
 import { PLACEHOLDER_IMAGE } from "@/constants/images";
+import { trackClick } from "@/services/analytics";
 
 export default {
   components: { AppLayout, ContactForm },
   data() {
     return { placeholderImg: PLACEHOLDER_IMAGE };
+  },
+  methods: {
+    trackHeroCta() {
+      trackClick("hero_cta_click", { page: "/" });
+    },
   },
 };
 </script>
