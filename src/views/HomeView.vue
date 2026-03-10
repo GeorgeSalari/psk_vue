@@ -98,27 +98,8 @@
 
       <!-- Contact Form -->
       <section class="contact">
-        <h2 class="section-title">Lorem ipsum dolor sit amet consectetur elit</h2>
-        <form class="contact-form" @submit.prevent>
-          <div class="form-group">
-            <input type="text" placeholder="Lorem ipsum" class="form-input" />
-          </div>
-          <div class="form-group">
-            <input type="email" placeholder="Lorem ipsum dolor" class="form-input" />
-          </div>
-          <div class="form-group">
-            <input type="tel" placeholder="Lorem ipsum" class="form-input" />
-          </div>
-          <p class="form-hint">* Lorem ipsum dolor sit amet consectetur.</p>
-          <p class="form-hint">* Lorem ipsum dolor sit amet consectetur elit.</p>
-          <p class="form-hint">* Lorem ipsum dolor sit amet consectetur.</p>
-          <div class="form-actions">
-            <button type="submit" class="btn-submit">Lorem Ipsum</button>
-          </div>
-          <p class="form-privacy">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor.
-          </p>
-        </form>
+        <h2 class="section-title">Оставьте заявку и мы свяжемся с вами</h2>
+        <ContactForm />
       </section>
     </div>
   </AppLayout>
@@ -126,10 +107,11 @@
 
 <script lang="ts">
 import AppLayout from "@/components/AppLayout.vue";
+import ContactForm from "@/components/ContactForm.vue";
 import { PLACEHOLDER_IMAGE } from "@/constants/images";
 
 export default {
-  components: { AppLayout },
+  components: { AppLayout, ContactForm },
   data() {
     return { placeholderImg: PLACEHOLDER_IMAGE };
   },
@@ -299,50 +281,6 @@ export default {
   max-width: 600px;
   margin: 0 auto 3rem;
   border-radius: 8px;
-
-  .contact-form {
-    .form-group {
-      margin-bottom: 1rem;
-    }
-
-    .form-input {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 1rem;
-    }
-
-    .form-hint {
-      font-size: 0.875rem;
-      color: #666;
-      margin-bottom: 0.5rem;
-    }
-
-    .form-actions {
-      margin: 1.5rem 0;
-    }
-
-    .btn-submit {
-      padding: 0.75rem 2rem;
-      background: #333;
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 1rem;
-
-      &:hover {
-        background: #555;
-      }
-    }
-
-    .form-privacy {
-      font-size: 0.75rem;
-      color: #888;
-      margin-top: 1rem;
-    }
-  }
 }
 
 @media (max-width: 768px) {

@@ -37,41 +37,10 @@
             </p>
           </div>
 
-          <form class="contact-form" @submit.prevent="onSubmit">
+          <div class="contact-form-wrapper">
             <p class="form-note">Заполните форму и мы свяжемся с вами в ближайшее время</p>
-            <div class="form-group">
-              <input
-                v-model="form.name"
-                type="text"
-                placeholder="Ваше имя *"
-                class="form-input"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <input
-                v-model="form.email"
-                type="email"
-                placeholder="Email *"
-                class="form-input"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <input
-                v-model="form.phone"
-                type="tel"
-                placeholder="Телефон *"
-                class="form-input"
-                required
-              />
-            </div>
-            <label class="form-consent">
-              <input v-model="form.consent" type="checkbox" required />
-              <span>Даю согласие на обработку персональных данных и соглашаюсь с политикой конфиденциальности</span>
-            </label>
-            <button type="submit" class="btn-submit">Отправить</button>
-          </form>
+            <ContactForm />
+          </div>
         </div>
       </div>
     </div>
@@ -81,25 +50,10 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import AppLayout from "@/components/AppLayout.vue";
+import ContactForm from "@/components/ContactForm.vue";
 
 export default defineComponent({
-  components: { AppLayout },
-  data() {
-    return {
-      form: {
-        name: "",
-        email: "",
-        phone: "",
-        consent: false,
-      },
-    };
-  },
-  methods: {
-    onSubmit() {
-      // Placeholder for form submission
-      console.log("Form submitted:", this.form);
-    },
-  },
+  components: { AppLayout, ContactForm },
 });
 </script>
 
@@ -211,57 +165,11 @@ export default defineComponent({
   }
 }
 
-.contact-form {
+.contact-form-wrapper {
   .form-note {
     margin-bottom: 1.5rem;
     font-size: 0.95rem;
     color: #555;
-  }
-
-  .form-group {
-    margin-bottom: 1rem;
-  }
-
-  .form-input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-
-    &:focus {
-      outline: none;
-      border-color: #1a1a1a;
-    }
-  }
-
-  .form-consent {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-    margin: 1rem 0 1.5rem;
-    font-size: 0.85rem;
-    color: #666;
-    cursor: pointer;
-
-    input {
-      flex-shrink: 0;
-      margin-top: 0.2rem;
-    }
-  }
-
-  .btn-submit {
-    padding: 0.75rem 2rem;
-    background: #1a1a1a;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-
-    &:hover {
-      background: #333;
-    }
   }
 }
 

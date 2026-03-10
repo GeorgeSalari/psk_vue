@@ -16,6 +16,7 @@ import AdminDashboardView from "@/views/AdminDashboardView.vue";
 import AdminCertificatesView from "@/views/AdminCertificatesView.vue";
 import AdminProductsView from "@/views/AdminProductsView.vue";
 import AdminVacanciesView from "@/views/AdminVacanciesView.vue";
+import AdminCallRequestsView from "@/views/AdminCallRequestsView.vue";
 import VacanciesView from "@/views/VacanciesView.vue";
 
 const routes: Array<RouteRecordRaw> = [
@@ -56,6 +57,12 @@ const routes: Array<RouteRecordRaw> = [
     path: "/admin/vacancies",
     name: "admin-vacancies",
     component: AdminVacanciesView,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: "/admin/call_requests",
+    name: "admin-call-requests",
+    component: AdminCallRequestsView,
     meta: { requiresAuth: true },
   },
 ];
