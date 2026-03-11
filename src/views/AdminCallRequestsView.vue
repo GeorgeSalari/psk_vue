@@ -263,4 +263,57 @@ export default defineComponent({
   display: flex;
   align-items: center;
 }
+
+@media (max-width: 768px) {
+  .requests-list {
+    padding: 0;
+    gap: 10px;
+  }
+
+  .request-card {
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .request-row {
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 8px;
+  }
+
+  .request-label {
+    min-width: unset;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .request-value {
+    font-size: 15px;
+  }
+
+  .request-phone {
+    font-size: 17px;
+    display: inline-block;
+    padding: 6px 0;
+  }
+
+  .request-meta {
+    flex-wrap: wrap;
+  }
+
+  .request-actions {
+    width: 100%;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 12px;
+  }
+
+  .request-actions .btn {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+  }
+}
 </style>
