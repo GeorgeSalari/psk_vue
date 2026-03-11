@@ -1,9 +1,26 @@
 <template>
-  <div class="admin-layout">
+  <div class="admin-layout" :class="{ 'sidebar-open': sidebarOpen }">
+    <div class="mobile-header">
+      <button class="hamburger-btn" @click="sidebarOpen = !sidebarOpen" aria-label="Toggle menu">
+        <svg v-if="!sidebarOpen" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+        <svg v-else xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24"
+          fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+      <span class="mobile-title">PSK Admin</span>
+    </div>
+    <div class="sidebar-overlay" @click="sidebarOpen = false" />
     <aside class="admin-sidebar">
       <div class="sidebar-logo">PSK Admin</div>
       <nav class="sidebar-nav">
-        <router-link to="/admin/dashboard" class="nav-item" active-class="active">
+        <router-link to="/admin/dashboard" class="nav-item" active-class="active" @click="closeSidebar">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <rect x="3" y="3" width="7" height="7" />
@@ -13,7 +30,7 @@
           </svg>
           <span>Dashboard</span>
         </router-link>
-        <router-link to="/admin/certificates" class="nav-item" active-class="active">
+        <router-link to="/admin/certificates" class="nav-item" active-class="active" @click="closeSidebar">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
@@ -23,7 +40,7 @@
           </svg>
           <span>Сертификаты</span>
         </router-link>
-        <router-link to="/admin/products" class="nav-item" active-class="active">
+        <router-link to="/admin/products" class="nav-item" active-class="active" @click="closeSidebar">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
@@ -32,7 +49,7 @@
           </svg>
           <span>Продукция</span>
         </router-link>
-        <router-link to="/admin/vacancies" class="nav-item" active-class="active">
+        <router-link to="/admin/vacancies" class="nav-item" active-class="active" @click="closeSidebar">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -42,7 +59,7 @@
           </svg>
           <span>Вакансии</span>
         </router-link>
-        <router-link to="/admin/call_requests" class="nav-item" active-class="active">
+        <router-link to="/admin/call_requests" class="nav-item" active-class="active" @click="closeSidebar">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
@@ -61,20 +78,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
   name: "AdminLayout",
   setup() {
     const router = useRouter();
+    const sidebarOpen = ref(false);
+
+    const closeSidebar = () => {
+      sidebarOpen.value = false;
+    };
 
     const logout = () => {
       localStorage.removeItem("admin_token");
       router.push({ name: "admin-sign-in" });
     };
 
-    return { logout };
+    return { sidebarOpen, closeSidebar, logout };
   },
 });
 </script>
@@ -85,6 +107,14 @@ export default defineComponent({
   min-height: 100vh;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, sans-serif;
+}
+
+.mobile-header {
+  display: none;
+}
+
+.sidebar-overlay {
+  display: none;
 }
 
 .admin-sidebar {
@@ -160,5 +190,81 @@ export default defineComponent({
   flex: 1;
   background: #f0f2f5;
   overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+
+  .mobile-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #1a1a2e;
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 110;
+  }
+
+  .hamburger-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .hamburger-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .mobile-title {
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 120;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    width: 260px;
+  }
+
+  .sidebar-open .admin-sidebar {
+    transform: translateX(0);
+  }
+
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 115;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+
+  .sidebar-open .sidebar-overlay {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .admin-main {
+    min-height: calc(100vh - 60px);
+  }
 }
 </style>
